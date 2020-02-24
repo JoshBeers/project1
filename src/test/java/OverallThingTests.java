@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -120,6 +121,16 @@ public class OverallThingTests {
     @Test
     public void testWritingJSONFile(){
         OverallThingy oat=OverallThingy.createOverallThingyFromString(OverallThingy.getTSVFromInternets("https://gist.githubusercontent.com/tacksoo/b32d630c2e5c7dcd8ebeb2fc67e9c7ae/raw/72b6bae956dfb3eeb66fa277f63ce8acb784fd01/pell.tsv"));
+        System.out.println(oat);
+        OverallThingy.createJSONFile("testJSON.json", oat);
+    }
+
+    @Test
+    public void testReadingJSONFile() throws Exception{
+        OverallThingy oat=OverallThingy.loadJSONFile("testJSON.json");
+        OverallThingy.createJSONFile("tempJSON.json",oat);
+        Assert.assertEquals("testing lenght of deserialized stuff", 5158, oat.getTotalSize());
+
     }
 
 }

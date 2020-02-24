@@ -1,16 +1,18 @@
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import jdk.nashorn.internal.ir.ObjectNode;
 import org.apache.commons.io.IOUtils;
+import sun.reflect.generics.tree.Tree;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class OverallThingy {
+public class OverallThingy implements Serializable {
 
     TreeMap<String,State> states;
 
@@ -83,15 +85,33 @@ public class OverallThingy {
         return rtn;
     }
 
-
     public static void createJSONFile(String fileLoc,OverallThingy oat){
         File f=new File(fileLoc);
         ObjectMapper om=new ObjectMapper();
+        om.enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            om.writeValue(f, oat);
+            om.writeValue(f, oat.states);
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public static OverallThingy loadJSONFile(String filename) throws Exception{
+        ObjectMapper mapper=new ObjectMapper();
+        File f=new File(filename);
+
+
+        TreeMap<String, LinkedHashMap> v=(TreeMap<String,LinkedHashMap>)mapper.readValue(f, TreeMap.class);
+        TreeMap<String,State> rtn=new TreeMap<>();
+        OverallThingy oat=new OverallThingy();
+
+        for(String s:v.keySet()){
+            rtn.put(s,new State(s,v.get(s)));
+
+        }
+        //System.out.println(rtn);
+        oat.states=rtn;
+        return oat;
     }
 
 

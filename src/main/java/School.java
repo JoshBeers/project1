@@ -1,10 +1,45 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.ObjectNode;
+
 import java.awt.*;
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 public class School {
 
     String name,city,state,type;
     int numStudents;
+    int OPE_ID;
+    long totalGrant;
+    double averageAmount;
+
+
+
+    public School() {
+    }
+
+    public School(int OPE_ID,String name, String city, String state, String type, long totalGrant, int numStudents, double averageAmount) {
+        this.OPE_ID=OPE_ID;
+        this.name = name;
+        this.city = city;
+        this.state = state;
+        this.type = type;
+        this.totalGrant = totalGrant;
+        this.numStudents = numStudents;
+        this.averageAmount = averageAmount;
+    }
+
+    public School(LinkedHashMap set){
+        this.OPE_ID=(int)set.get("ope_ID");
+        this.name = (String)set.get("name");
+        this.city = (String)set.get("city");
+        this.state = (String)set.get("state");
+        this.type = (String)set.get("type");
+        this.totalGrant = (int)set.get("totalGrant");
+        this.numStudents = (int)set.get("numStudents");
+        this.averageAmount =  (double)set.get("averageAmount");
+    }
 
     public int getOPE_ID() {
         return OPE_ID;
@@ -13,10 +48,6 @@ public class School {
     public void setOPE_ID(int OPE_ID) {
         this.OPE_ID = OPE_ID;
     }
-
-    int OPE_ID;
-    long totalGrant;
-    double averageAmount;
 
 
     public String getName() {
@@ -75,19 +106,6 @@ public class School {
         this.averageAmount = averageAmount;
     }
 
-    public School() {
-    }
-
-    public School(int OPE_ID,String name, String city, String state, String type, long totalGrant, int numStudents, double averageAmount) {
-        this.OPE_ID=OPE_ID;
-        this.name = name;
-        this.city = city;
-        this.state = state;
-        this.type = type;
-        this.totalGrant = totalGrant;
-        this.numStudents = numStudents;
-        this.averageAmount = averageAmount;
-    }
 
     @Override
     public String toString() {
@@ -121,6 +139,15 @@ public class School {
        // System.out.println(s);
         return Long.parseLong(s);
     }
+
+    /*
+    public static School createSchoolFromJSON(String s){
+        ObjectMapper m=new ObjectMapper();
+        ObjectNode objectNode =m.readValue(s,ObjectNode.class);
+
+    }
+
+     */
 
 
 }

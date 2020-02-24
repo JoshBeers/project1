@@ -1,5 +1,7 @@
-import java.util.Comparator;
-import java.util.TreeSet;
+import jdk.nashorn.internal.ir.ObjectNode;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 
 public class State {
@@ -7,25 +9,40 @@ public class State {
     TreeSet<School> schools;
     String stateInitials;
 
-    private class schoolOrder implements Comparator<School> {
-
-        public int compare(School o1, School o2) {
-            if(o1.getName().compareTo(o2.name)==0) {
-                if(o1.city.compareTo(o2.city)==0){
-                    return Integer.compare(o1.numStudents,o2.numStudents);
-                }
-
-
-
-                return o1.city.compareTo(o2.city);
-            }
-            return o1.getName().compareTo(o2.name);
+    public State(String s, LinkedHashMap linkedHashMap) {
+        this.stateInitials=s;
+        ArrayList<LinkedHashMap> temp=(ArrayList<LinkedHashMap>)linkedHashMap.get("schools");
+        this.schools=new TreeSet<>(new Comparators.schoolOrder());
+        for(LinkedHashMap m:temp){
+            schools.add(new School(m));
         }
+    }
+
+
+    public State(TreeSet<School> schools, String stateInitials) {
+        this.schools = schools;
+        this.stateInitials = stateInitials;
     }
 
     public State(String stateInitials) {
         this.stateInitials = stateInitials;
-        this.schools = new TreeSet<School>(new schoolOrder());
+        this.schools = new TreeSet<School>(new Comparators.schoolOrder());
+    }
+
+    public TreeSet<School> getSchools() {
+        return schools;
+    }
+
+    public void setSchools(TreeSet<School> schools) {
+        this.schools = schools;
+    }
+
+    public String getStateInitials() {
+        return stateInitials;
+    }
+
+    public void setStateInitials(String stateInitials) {
+        this.stateInitials = stateInitials;
     }
 
     public void add(School s){
